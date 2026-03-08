@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sereena Jency — AI & ML Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:      #fdf6f0;
+      --bg2:     #fff9f5;
+      --border:  #f0d8cc;
+      --accent:  #e8336d;
+      --purple:  #7c3aed;
+      --text:    #1a0a14;
+      --muted:   #9a7080;
+      --card:    #ffffff;
+      --grad:    linear-gradient(135deg, #e8336d, #7c3aed);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    body { cursor: none; }
+    #cur  { position: fixed; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.1s; }
+    #ring { position: fixed; width: 36px; height: 36px; border: 1.5px solid var(--accent); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); opacity: 0.45; transition: width 0.25s, height 0.25s; }
+    a:hover ~ #ring, a:hover { }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 4rem;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    nav.solid {
+      background: rgba(253,246,240,0.95);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900; font-size: 1.25rem;
+      background: var(--grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-btn {
+      background: var(--grad); color: #fff !important;
+      padding: 0.45rem 1.25rem; border-radius: 100px;
+    }
+    .nav-btn:hover { opacity: 0.85; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 4rem 4rem;
+      gap: 4rem;
+      position: relative; overflow: hidden;
+    }
+
+    /* soft background blobs */
+    .hero::before {
+      content: '';
+      position: absolute; top: -150px; right: -150px;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,51,109,0.1) 0%, transparent 70%);
+      animation: float1 10s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -100px; left: -100px;
+      width: 450px; height: 450px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%);
+      animation: float2 12s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes float1 { from { transform: translate(0,0); } to { transform: translate(30px, 20px); } }
+    @keyframes float2 { from { transform: translate(0,0); } to { transform: translate(-20px, 25px); } }
+
+    .hero-text { flex: 1.1; position: relative; z-index: 1; }
+    .hero-card-wrap { flex: 0.9; position: relative; z-index: 1; }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; color: var(--accent);
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0; animation: up 0.7s 0.1s forwards;
+    }
+    .eyebrow::before { content:''; width:24px; height:1.5px; background:var(--accent); }
+
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5.5vw, 5rem);
+      font-weight: 900; line-height: 1.05; letter-spacing: -0.02em;
+      opacity: 0; animation: up 0.7s 0.2s forwards;
+    }
+    .hero-name .grad-text {
+      font-style: italic;
+      background: var(--grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1rem; color: var(--muted); line-height: 1.75;
+      margin: 1.5rem 0 2.5rem; max-width: 44ch;
+      opacity: 0; animation: up 0.7s 0.3s forwards;
+    }
+
+    .hero-btns {
+      display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;
+      opacity: 0; animation: up 0.7s 0.4s forwards;
+    }
+    .btn-pink {
+      background: var(--grad); color: #fff;
+      padding: 0.85rem 2rem; border-radius: 100px;
+      text-decoration: none; font-weight: 700; font-size: 0.875rem;
+      box-shadow: 0 4px 18px rgba(232,51,109,0.25);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: inline-block;
+    }
+    .btn-pink:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,51,109,0.35); }
+    .btn-ghost {
+      border: 1.5px solid var(--border); color: var(--text);
+      padding: 0.85rem 1.8rem; border-radius: 100px;
+      text-decoration: none; font-weight: 600; font-size: 0.875rem;
+      transition: border-color 0.2s, color 0.2s;
+      display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    .hero-tags {
+      display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem;
+      opacity: 0; animation: up 0.7s 0.5s forwards;
+    }
+    .tag {
+      background: var(--card); border: 1px solid var(--border);
+      padding: 0.35rem 0.9rem; border-radius: 100px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--muted);
+    }
+
+    /* Profile card */
+    .pcard {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 22px; padding: 2.25rem;
+      box-shadow: 0 16px 48px rgba(232,51,109,0.07), 0 2px 8px rgba(0,0,0,0.04);
+      opacity: 0; animation: up 0.7s 0.25s forwards;
+      position: relative;
+    }
+    .pcard::before {
+      content: ''; position: absolute; inset: -1px; border-radius: 23px; z-index: -1;
+      background: linear-gradient(135deg, rgba(232,51,109,0.25), rgba(124,58,237,0.25), transparent 55%);
+    }
+    .avatar {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--grad);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; color: #fff;
+      margin-bottom: 1rem; position: relative;
+    }
+    .avatar-spin {
+      position: absolute; inset: -4px; border-radius: 50%;
+      border: 2px dashed rgba(232,51,109,0.3);
+      animation: spin 14s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .pname { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; }
+    .prole { font-size: 0.78rem; color: var(--muted); margin-bottom: 1.4rem; margin-top: 0.2rem; }
+
+    .pstats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+    .pstat { padding: 0.9rem 0.5rem; text-align: center; background: var(--bg); }
+    .pstat + .pstat { border-left: 1px solid var(--border); }
+    .pstat-n {
+      font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; line-height: 1;
+      background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .pstat-l { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.25rem; }
+
+    .status {
+      display: flex; align-items: center; gap: 0.55rem;
+      background: rgba(16,185,129,0.07); border: 1px solid rgba(16,185,129,0.2);
+      padding: 0.55rem 1rem; border-radius: 100px;
+      font-size: 0.73rem; font-weight: 600; color: #059669;
+    }
+    .dot { width: 7px; height: 7px; background: #10b981; border-radius: 50%; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+    /* ── TICKER ── */
+    .ticker { background: var(--text); overflow: hidden; padding: 0.95rem 0; }
+    .ticker-track {
+      display: flex; gap: 2.5rem; width: max-content;
+      animation: ticker 25s linear infinite;
+    }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .ticker-item {
+      white-space: nowrap;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+      color: rgba(255,255,255,0.5); letter-spacing: 0.07em;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .ticker-item span { color: var(--accent); }
+
+    /* ── SECTIONS ── */
+    .section { padding: 5.5rem 4rem; }
+    .section.alt { background: var(--bg2); }
+
+    .sec-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.67rem;
+      color: var(--accent); letter-spacing: 0.14em; text-transform: uppercase;
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem;
+    }
+    .sec-label::before { content:''; width:18px; height:1.5px; background:var(--accent); }
+
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900;
+      line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 2.5rem;
+    }
+    .sec-title em {
+      font-style: italic;
+      background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ── ABOUT ── */
+    .about-layout {
+      display: flex; gap: 5rem; align-items: flex-start;
+    }
+    .about-photo-col { flex: 0 0 280px; }
+    .about-photo {
+      width: 100%; aspect-ratio: 4/5;
+      background: linear-gradient(135deg, #fce7f3, #ede9fe);
+      border-radius: 18px; border: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 0.6rem; position: relative; overflow: hidden;
+    }
+    .about-photo::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(232,51,109,0.06), rgba(124,58,237,0.06));
+    }
+    .about-photo svg { opacity: 0.2; position: relative; z-index: 1; }
+    .photo-hint { font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:0.18em; color:var(--muted); text-transform:uppercase; position:relative; z-index:1; }
+
+    .chip {
+      position: absolute; background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 0.7rem 1rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.07); font-size: 0.75rem; font-weight: 600;
+    }
+    .chip-a { top: 1.2rem; right: -1.2rem; display: flex; align-items: center; gap: 0.4rem; }
+    .chip-b { bottom: 1.2rem; left: -1.2rem; font-family:'JetBrains Mono',monospace; font-size:0.67rem; color:var(--muted); }
+
+    .about-text { flex: 1; }
+    .about-text p { font-size: 0.98rem; color: #6b4f5c; line-height: 1.8; margin-bottom: 1.3rem; }
+    .about-text p strong { color: var(--text); }
+
+    .skills {
+      display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1.75rem;
+    }
+    .skill {
+      background: var(--card); border: 1px solid var(--border);
+      padding: 0.4rem 0.9rem; border-radius: 7px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text);
+      cursor: default; transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .skill:hover { background: var(--grad); color: #fff; border-color: transparent; transform: translateY(-2px); }
+
+    /* ── PROJECTS ── */
+    .projects-list {
+      display: flex; flex-direction: column; gap: 1.5rem;
+    }
+    .proj {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      overflow: hidden; display: flex;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .proj:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(232,51,109,0.09); }
+    .proj-thumb {
+      width: 260px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem; position: relative; overflow: hidden;
+    }
+    .proj:nth-child(1) .proj-thumb { background: linear-gradient(135deg,#fce7f3,#ede9fe); }
+    .proj:nth-child(2) .proj-thumb { background: linear-gradient(135deg,#fff1f2,#fce7f3); }
+    .proj:nth-child(3) .proj-thumb { background: linear-gradient(135deg,#f0fdf4,#dcfce7); }
+    .proj-dots {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(232,51,109,0.1) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+    .proj-emoji { position: relative; z-index: 1; }
+
+    .proj-body { flex: 1; padding: 1.75rem 2rem; }
+    .proj-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+    .proj-type { font-family:'JetBrains Mono',monospace; font-size:0.63rem; color:var(--accent); text-transform:uppercase; letter-spacing:0.1em; }
+    .proj-year { font-family:'JetBrains Mono',monospace; font-size:0.63rem; color:var(--muted); }
+    .proj-title { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; margin-bottom:0.5rem; }
+    .proj-desc { font-size:0.85rem; color:var(--muted); line-height:1.65; margin-bottom:1.25rem; }
+    .proj-footer { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; }
+    .proj-tags { display:flex; gap:0.4rem; flex-wrap:wrap; }
+    .ptag { background:#fef0e8; border:1px solid var(--border); padding:0.22rem 0.6rem; border-radius:6px; font-size:0.63rem; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+    .github-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--grad); color: #fff;
+      padding: 0.45rem 1.1rem; border-radius: 100px;
+      text-decoration: none; font-size: 0.75rem; font-weight: 700;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .github-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ── EDUCATION ── */
+    .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .edu-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2rem; position: relative; overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .edu-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--grad); }
+    .edu-card:hover { transform: translateY(-4px); box-shadow: 0 14px 36px rgba(232,51,109,0.08); }
+    .edu-flag { font-size: 1.75rem; margin-bottom: 0.9rem; }
+    .edu-deg { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; line-height:1.3; margin-bottom:0.3rem; }
+    .edu-school { font-size:0.82rem; color:var(--accent); font-weight:600; margin-bottom:0.2rem; }
+    .edu-period { font-family:'JetBrains Mono',monospace; font-size:0.67rem; color:var(--muted); margin-bottom:0.9rem; }
+    .edu-info { font-size:0.83rem; color:#6b4f5c; line-height:1.65; }
+
+    .certs { display:flex; flex-wrap:wrap; gap:1rem; margin-top:2.5rem; }
+    .cert {
+      background:var(--card); border:1px solid var(--border); border-radius:12px;
+      padding:0.9rem 1.25rem; display:flex; align-items:center; gap:0.7rem;
+      transition:border-color 0.2s;
+    }
+    .cert:hover { border-color:var(--accent); }
+    .cert-icon { font-size:1.3rem; }
+    .cert-name { font-size:0.82rem; font-weight:600; }
+    .cert-by { font-size:0.68rem; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+
+    /* ── CONTACT ── */
+    .contact-section {
+      background: var(--text); color: #fff; padding: 5.5rem 4rem;
+      position: relative; overflow: hidden;
+    }
+    .contact-section::before {
+      content: ''; position: absolute; top: -120px; right: -120px;
+      width: 480px; height: 480px; border-radius: 50%;
+      background: rgba(232,51,109,0.18); filter: blur(90px); pointer-events: none;
+    }
+    .contact-section::after {
+      content: ''; position: absolute; bottom: -100px; left: -80px;
+      width: 380px; height: 380px; border-radius: 50%;
+      background: rgba(124,58,237,0.14); filter: blur(90px); pointer-events: none;
+    }
+    .contact-inner { position: relative; z-index: 1; }
+    .contact-section .sec-label { color: rgba(255,255,255,0.35); }
+    .contact-section .sec-label::before { background: rgba(255,255,255,0.25); }
+    .contact-section .sec-title { color: #fff; }
+    .contact-sub { font-size:0.97rem; color:rgba(255,255,255,0.5); line-height:1.75; max-width:46ch; margin-bottom:2.5rem; }
+    .contact-email {
+      font-family:'Playfair Display',serif; font-style:italic;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      background: var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      text-decoration: none; display: inline-block; margin-bottom: 2.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 1.5rem;
+      transition: opacity 0.2s;
+    }
+    .contact-email:hover { opacity: 0.8; }
+    .socials { display:flex; flex-wrap:wrap; gap:0.75rem; }
+    .social {
+      display:inline-flex; align-items:center; gap:0.4rem;
+      background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1);
+      color:rgba(255,255,255,0.7); padding:0.55rem 1.25rem; border-radius:100px;
+      text-decoration:none; font-size:0.78rem; font-weight:600;
+      transition:background 0.2s, color 0.2s;
+    }
+    .social:hover { background:rgba(255,255,255,0.12); color:#fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 1.6rem 4rem; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--bg);
+    }
+    footer p { font-family:'JetBrains Mono',monospace; font-size:0.67rem; color:var(--muted); }
+    .fg { background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:700; }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.on { opacity: 1; transform: none; }
+
+    /* ── KEYFRAMES ── */
+    @keyframes up {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { flex-direction: column; padding: 7rem 1.5rem 3rem; gap: 2.5rem; }
+      .hero-card-wrap { width: 100%; }
+      .section { padding: 4rem 1.5rem; }
+      .about-layout { flex-direction: column; }
+      .about-photo-col { display: none; }
+      .proj { flex-direction: column; }
+      .proj-thumb { width: 100%; height: 160px; }
+      .edu-grid { grid-template-columns: 1fr; }
+      .contact-section { padding: 4rem 1.5rem; }
+      footer { flex-direction: column; gap: 0.6rem; padding: 1.4rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor -->
+  <div id="cur"></div>
+  <div id="ring"></div>
+
+  <!-- ── NAV ── -->
+  <nav id="nav">
+    <div class="logo">SJ.</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact" class="nav-btn">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <div class="hero">
+    <div class="hero-text">
+      <div class="eyebrow">AI Engineer · ML Developer · Builder</div>
+      <h1 class="hero-name">
+        Hi, I'm<br>
+        <span class="grad-text">Sereena Jency</span>
+      </h1>
+      <p class="hero-sub">
+        Master's student in Automation & IT at TH Köln. I build intelligent systems using machine learning, deep learning, and generative AI — currently based in Gummersbach, Germany.
+      </p>
+      <div class="hero-btns">
+        <a href="#projects" class="btn-pink">See my projects ✦</a>
+        <a href="#contact" class="btn-ghost">Get in touch →</a>
+      </div>
+      <div class="hero-tags">
+        <span class="tag">Python</span>
+        <span class="tag">TensorFlow</span>
+        <span class="tag">Stable Diffusion</span>
+        <span class="tag">NLP</span>
+        <span class="tag">PyTorch</span>
+        <span class="tag">AWS</span>
+      </div>
+    </div>
+
+    <div class="hero-card-wrap">
+      <div class="pcard">
+        <div class="avatar">SJ<div class="avatar-spin"></div></div>
+        <div class="pname">Sereena Jency</div>
+        <div class="prole">AI & ML Engineer · Gummersbach, Germany 🇩🇪</div>
+        <div class="pstats">
+          <div class="pstat">
+            <div class="pstat-n">4+</div>
+            <div class="pstat-l">Years Study</div>
+          </div>
+          <div class="pstat">
+            <div class="pstat-n">3</div>
+            <div class="pstat-l">Projects</div>
+          </div>
+          <div class="pstat">
+            <div class="pstat-n">B2</div>
+            <div class="pstat-l">German</div>
+          </div>
+        </div>
+        <div class="status">
+          <div class="dot"></div>
+          Open to opportunities in Germany
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TICKER ── -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <div class="ticker-item">Python <span>✦</span></div>
+      <div class="ticker-item">Machine Learning <span>✦</span></div>
+      <div class="ticker-item">Women in Tech <span>✦</span></div>
+      <div class="ticker-item">Generative AI <span>✦</span></div>
+      <div class="ticker-item">Stable Diffusion <span>✦</span></div>
+      <div class="ticker-item">Deep Learning <span>✦</span></div>
+      <div class="ticker-item">NLP <span>✦</span></div>
+      <div class="ticker-item">TH Köln <span>✦</span></div>
+      <div class="ticker-item">Hugging Face <span>✦</span></div>
+      <div class="ticker-item">Building the Future <span>✦</span></div>
+      <!-- duplicate for seamless loop -->
+      <div class="ticker-item">Python <span>✦</span></div>
+      <div class="ticker-item">Machine Learning <span>✦</span></div>
+      <div class="ticker-item">Women in Tech <span>✦</span></div>
+      <div class="ticker-item">Generative AI <span>✦</span></div>
+      <div class="ticker-item">Stable Diffusion <span>✦</span></div>
+      <div class="ticker-item">Deep Learning <span>✦</span></div>
+      <div class="ticker-item">NLP <span>✦</span></div>
+      <div class="ticker-item">TH Köln <span>✦</span></div>
+      <div class="ticker-item">Hugging Face <span>✦</span></div>
+      <div class="ticker-item">Building the Future <span>✦</span></div>
+    </div>
+  </div>
+
+  <!-- ── ABOUT ── -->
+  <section class="section alt" id="about">
+    <div class="about-layout">
+      <div class="about-photo-col reveal">
+        <div class="about-photo" style="position:relative;">
+          <svg width="64" height="64" viewBox="0 0 72 72" fill="none">
+            <circle cx="36" cy="24" r="14" stroke="#e8336d" stroke-width="2"/>
+            <path d="M6 66c0-16.6 13.4-30 30-30s30 13.4 30 30" stroke="#e8336d" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="photo-hint">Your photo here</span>
+          <div class="chip chip-a">
+            <span>🤖</span>
+            <div>
+              <div style="font-size:0.7rem;font-weight:700;">AI Builder</div>
+              <div style="font-size:0.6rem;color:var(--muted);">GenAI Projects</div>
+            </div>
+          </div>
+          <div class="chip chip-b">🇮🇳 → 🇩🇪 Engineer abroad</div>
+        </div>
+      </div>
+
+      <div class="about-text reveal">
+        <div class="sec-label">About me</div>
+        <h2 class="sec-title">AI, <em>curiosity</em>,<br>and real-world impact</h2>
+        <p>I'm <strong>Sereena Jency</strong>, a Master's student in <strong>Automation and Information Technology</strong> at TH Köln, Germany. My B.Tech background is in Artificial Intelligence and Data Science, and I'm passionate about building AI systems that solve real problems.</p>
+        <p>I've built hands-on projects spanning <strong>Generative AI</strong> (Stable Diffusion, Hugging Face Diffusers), <strong>NLP</strong> text classification pipelines, and <strong>deep learning</strong> models for precision agriculture — working end-to-end from data to deployment.</p>
+        <p>Originally from Chennai, India 🇮🇳, now living in Gummersbach 🇩🇪. I speak <strong>English (C1)</strong> and <strong>German (B2)</strong> and I'm actively looking for working student or internship roles in Germany's AI/ML ecosystem.</p>
+        <div class="skills">
+          <span class="skill">Python</span>
+          <span class="skill">PyTorch</span>
+          <span class="skill">TensorFlow</span>
+          <span class="skill">Scikit-learn</span>
+          <span class="skill">Stable Diffusion</span>
+          <span class="skill">Hugging Face</span>
+          <span class="skill">Flask</span>
+          <span class="skill">NLP</span>
+          <span class="skill">PostgreSQL</span>
+          <span class="skill">AWS</span>
+          <span class="skill">Git</span>
+          <span class="skill">Linux</span>
+          <span class="skill">Pandas</span>
+          <span class="skill">NumPy</span>
+          <span class="skill">MATLAB</span>
+          <span class="skill">C++</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROJECTS ── -->
+  <section class="section" id="projects">
+    <div class="sec-label reveal">Selected work</div>
+    <h2 class="sec-title reveal">Projects I've <em>built</em></h2>
+
+    <div class="projects-list">
+
+      <!-- Project 1: AI Interior Design (has GitHub) -->
+      <div class="proj reveal">
+        <div class="proj-thumb">
+          <div class="proj-dots"></div>
+          <span class="proj-emoji">🏠</span>
+        </div>
+        <div class="proj-body">
+          <div class="proj-meta">
+            <span class="proj-type">Generative AI · Computer Vision</span>
+            <span class="proj-year">2024</span>
+          </div>
+          <h3 class="proj-title">AI-Based Interior Design Generator</h3>
+          <p class="proj-desc">
+            Web app that generates interior design concepts from uploaded room images using Stable Diffusion v1.5.
+            Built a Flask + PyTorch backend pipeline with Hugging Face Diffusers for prompt-based image generation.
+            Integrated SERPAPI + Google Lens to recommend real furniture products with prices and links.
+            Developed a simple HTML/JS frontend for image upload and result display.
+          </p>
+          <div class="proj-footer">
+            <div class="proj-tags">
+              <span class="ptag">Stable Diffusion</span>
+              <span class="ptag">Hugging Face</span>
+              <span class="ptag">Flask</span>
+              <span class="ptag">PyTorch</span>
+              <span class="ptag">SERPAPI</span>
+              <span class="ptag">PIL</span>
+            </div>
+            <!-- ✏️ PASTE YOUR GITHUB URL IN href="" BELOW -->
+            <a href="" target="_blank" rel="noopener" class="github-btn">
+              ↗ GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 2: Spam Detection (no GitHub) -->
+      <div class="proj reveal">
+        <div class="proj-thumb">
+          <div class="proj-dots"></div>
+          <span class="proj-emoji">📧</span>
+        </div>
+        <div class="proj-body">
+          <div class="proj-meta">
+            <span class="proj-type">NLP · Machine Learning</span>
+            <span class="proj-year">2024</span>
+          </div>
+          <h3 class="proj-title">Spam Detection using Naïve Bayes</h3>
+          <p class="proj-desc">
+            Built a full NLP text classification pipeline including tokenization, stop-word removal, and TF-IDF vectorization.
+            Implemented a Naïve Bayes classifier with structured dataset preparation for training and evaluation.
+            Assessed model performance using precision, recall, F1-score, accuracy, and cross-validation.
+            Performed error analysis to identify misclassification patterns and improve prediction robustness.
+          </p>
+          <div class="proj-footer">
+            <div class="proj-tags">
+              <span class="ptag">Python</span>
+              <span class="ptag">Scikit-learn</span>
+              <span class="ptag">NLP</span>
+              <span class="ptag">TF-IDF</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 3: Precision Agriculture (no GitHub) -->
+      <div class="proj reveal">
+        <div class="proj-thumb">
+          <div class="proj-dots"></div>
+          <span class="proj-emoji">🌾</span>
+        </div>
+        <div class="proj-body">
+          <div class="proj-meta">
+            <span class="proj-type">Deep Learning · Data Science</span>
+            <span class="proj-year">2023</span>
+          </div>
+          <h3 class="proj-title">Precision Agriculture using ML & Deep Learning</h3>
+          <p class="proj-desc">
+            Developed a crop yield prediction system using supervised ML and deep learning models on large agricultural datasets.
+            Applied feature engineering, data cleaning, and validation checks across environmental and geographic data.
+            Implemented and benchmarked multiple ML and deep learning architectures using TensorFlow.
+            Evaluated using RMSE and accuracy metrics to identify the optimal approach for sustainable farming optimization.
+          </p>
+          <div class="proj-footer">
+            <div class="proj-tags">
+              <span class="ptag">Python</span>
+              <span class="ptag">TensorFlow</span>
+              <span class="ptag">Data Analytics</span>
+              <span class="ptag">EDA</span>
+              <span class="ptag">Feature Engineering</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── EDUCATION ── -->
+  <section class="section alt" id="education">
+    <div class="sec-label reveal">Background</div>
+    <h2 class="sec-title reveal">Education &amp; <em>Credentials</em></h2>
+
+    <div class="edu-grid">
+      <div class="edu-card reveal">
+        <div class="edu-flag">🇩🇪</div>
+        <div class="edu-deg">M.Eng. Automation and Information Technology</div>
+        <div class="edu-school">TH Köln · Gummersbach, Germany</div>
+        <div class="edu-period">October 2025 – Present</div>
+        <div class="edu-info">Machine learning, deep learning, industrial integration, data-driven system modeling, numerical optimization, and intelligent automation of technical systems. Focus on AI-driven decision systems and industrial environments.</div>
+      </div>
+      <div class="edu-card reveal">
+        <div class="edu-flag">🇮🇳</div>
+        <div class="edu-deg">B.Tech. Artificial Intelligence &amp; Data Science</div>
+        <div class="edu-school">Panimalar Institute of Technology · Chennai, India</div>
+        <div class="edu-period">August 2020 – July 2024</div>
+        <div class="edu-info">Machine learning, deep learning, NLP, data mining, statistical analysis, database systems, computer vision, and algorithm design.</div>
+      </div>
+    </div>
+
+    <div class="certs">
+      <div class="cert reveal">
+        <span class="cert-icon">🏅</span>
+        <div>
+          <div class="cert-name">Machine Learning Masterclass</div>
+          <div class="cert-by">Udemy</div>
+        </div>
+      </div>
+      <div class="cert reveal">
+        <span class="cert-icon">🏅</span>
+        <div>
+          <div class="cert-name">Python Programming</div>
+          <div class="cert-by">GUVI</div>
+        </div>
+      </div>
+      <div class="cert reveal">
+        <span class="cert-icon">🤖</span>
+        <div>
+          <div class="cert-name">Industrial Robotics Workshop</div>
+          <div class="cert-by">Anna University · IMrobonix</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <div class="contact-section" id="contact">
+    <div class="contact-inner">
+      <div class="sec-label reveal">Contact</div>
+      <h2 class="sec-title reveal">Let's connect<br>and <em>build together</em></h2>
+      <p class="contact-sub reveal">
+        Open to working student positions, internships, thesis collaborations, and full-time AI/ML roles in Germany.
+        Feel free to reach out in English or German!
+      </p>
+      <a href="mailto:sereenajencyofficial@gmail.com" class="contact-email reveal">
+        sereenajencyofficial@gmail.com
+      </a>
+      <div class="socials reveal">
+        <a href="https://www.linkedin.com/in/sereena-jency-711983301" target="_blank" rel="noopener" class="social">↗ LinkedIn</a>
+        <!-- ✏️ ADD YOUR GITHUB URL BELOW -->
+        <a href="" target="_blank" rel="noopener" class="social">↗ GitHub</a>
+        <a href="tel:+4915510860995" class="social">↗ +49 155 1086 0995</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p>© 2026 <span class="fg">Sereena Jency</span>. Built with passion from Gummersbach 🇩🇪</p>
+    <p>Hosted on <span class="fg">GitHub Pages</span> · Free forever</p>
+  </footer>
+
+  <script>
+    // ── Custom cursor
+    const cur  = document.getElementById('cur');
+    const ring = document.getElementById('ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cur.style.left = mx + 'px';
+      cur.style.top  = my + 'px';
+    });
+
+    function animRing() {
+      rx += (mx - rx) * 0.13;
+      ry += (my - ry) * 0.13;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animRing);
+    }
+    animRing();
+
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => { ring.style.width = '52px'; ring.style.height = '52px'; });
+      el.addEventListener('mouseleave', () => { ring.style.width = '36px'; ring.style.height = '36px'; });
+    });
+
+    // ── Nav on scroll
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('solid', window.scrollY > 40);
+    });
+
+    // ── Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('on'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
